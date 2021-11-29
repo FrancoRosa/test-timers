@@ -1,9 +1,16 @@
+import { Routes, Navigate, Route } from "react-router-dom";
+import { StoreProvider, createStore } from "easy-peasy";
+import model from "../js/model";
+import Home from "./Home";
+import Config from "./Config";
+
 const App = () => {
   return (
-    <div>
-      <h1>Hello</h1>
-      <p>People</p>
-    </div>
+    <Routes>
+      <Route path="/home" component={Home} />
+      <Route path="/config" component={Config} />
+      <Route path="/" component={Home} />
+    </Routes>
   );
 };
 
