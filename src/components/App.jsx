@@ -3,14 +3,17 @@ import { StoreProvider, createStore } from "easy-peasy";
 import model from "../js/model";
 import Home from "./Home";
 import Config from "./Config";
+import Navigator from "./Navigator";
 
 const App = () => {
   return (
-    <Routes>
-      <Route path="/home" component={Home} />
-      <Route path="/config" component={Config} />
-      <Route path="/" component={Home} />
-    </Routes>
+    <div className="container">
+      <Routes>
+        <Route path="home" element={<Home />} />
+        <Route path="config" element={<Config />} />
+        <Route path="*" element={<Home />} />
+      </Routes>
+    </div>
   );
 };
 

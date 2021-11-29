@@ -1,3 +1,16 @@
 .box {
   background-color: aquamarine;
 }
+
+.is-flex-centered {
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.navigator {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  padding: 1em;
+}
