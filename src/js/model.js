@@ -7,16 +7,30 @@ const getSavedStorage = (key) => {
 const initial = {
   pxWidth: 1366,
   cmWidth: 41,
+  boxes: 10,
+  size: [7, 2],
 };
 
-export default {
+const model = {
   pxWidth: getSavedStorage("pxWidth"),
-  setPxWith: action((state, pxWidth) => {
+  setPxWidth: action((state, pxWidth) => {
     state.pxWidth = pxWidth;
   }),
 
   cmWidth: getSavedStorage("cmWidth"),
-  setCmWith: action((state, cmWidth) => {
+  setCmWidth: action((state, cmWidth) => {
     state.cmWidth = cmWidth;
   }),
+
+  boxes: getSavedStorage("boxes"),
+  setBoxes: action((state, boxes) => {
+    state.boxes = boxes;
+  }),
+
+  size: getSavedStorage("size"),
+  setSize: action((state, size) => {
+    state.size = size;
+  }),
 };
+
+export default model;

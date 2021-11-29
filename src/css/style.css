@@ -1,11 +1,10 @@
 .box {
-  background-color: aquamarine;
+  border-style: solid 1px;
 }
 
 .is-flex-centered {
   justify-content: center;
   align-items: center;
-  height: 100vh;
 }
 
 .navigator {
@@ -13,4 +12,20 @@
   top: 1em;
   right: 1em;
   padding: 1em;
+}
+
+.config {
+  height: 90vh;
+}
+
+.m-4 {
+  margin: 1em;
+}
+
+.mt-4 {
+  margin-top: 1em;
+}
+
+.ml-4 {
+  margin-left: 1em;
 }
