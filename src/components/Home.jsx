@@ -5,7 +5,7 @@ import Box from "./Box";
 const Home = () => {
   const boxes = useStoreState((state) => state.boxes);
   const elements = [...Array(parseInt(boxes)).keys()];
-  console.log(elements);
+
   return (
     <div>
       <h1>This is Home</h1>
