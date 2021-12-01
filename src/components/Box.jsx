@@ -26,6 +26,21 @@ const Box = () => {
     minWidth: sizePx[0],
   };
 
+  const handlePlay = () => {
+    setStatus("counting");
+  };
+
+  const handleStop = () => {
+    setStatus("free");
+    setCounter(0);
+    setProgress(true);
+  };
+
+  const handleResponse = () => {
+    setModal(false);
+    handleStop();
+  };
+
   useEffect(() => {
     if (status !== "free") {
       setCounter(counter + 1);
@@ -52,17 +67,10 @@ const Box = () => {
           className={`is-flex is-flex-centered has-background-black`}
           style={boxStyle}
         >
-          <button className="button m-1" onClick={() => setStatus("counting")}>
+          <button className="button m-1" onClick={handlePlay}>
             {">"}
           </button>
-          <button
-            className="button m-1"
-            onClick={() => {
-              setStatus("free");
-              setCounter(0);
-              setProgress(true);
-            }}
-          >
+          <button className="button m-1" onClick={handleStop}>
             {"[]"}
           </button>
           <button className="button m-1">{counter}</button>
@@ -79,19 +87,19 @@ const Box = () => {
         <div className="modal-content is-flex is-flex-column">
           <button
             className="button is-success is-large is-outlined m-4"
-            onClick={() => setModal(false)}
+            onClick={handleResponse}
           >
             Negative
           </button>
           <button
             className="button is-danger is-large is-outlined m-4"
-            onClick={() => setModal(false)}
+            onClick={handleResponse}
           >
             Positive
           </button>
           <button
             className="button is-warning is-large is-outlined m-4"
-            onClick={() => setModal(false)}
+            onClick={handleResponse}
           >
             Invalid
           </button>
