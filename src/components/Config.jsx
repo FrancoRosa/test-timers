@@ -13,27 +13,32 @@ const Config = () => {
   const cmWidth = useStoreState((state) => state.cmWidth);
   const boxes = useStoreState((state) => state.boxes);
   const size = useStoreState((state) => state.size);
+  const time = useStoreState((state) => state.time);
 
   const setPxWidth = useStoreActions((actions) => actions.setPxWidth);
   const setCmWidth = useStoreActions((actions) => actions.setCmWidth);
   const setBoxes = useStoreActions((actions) => actions.setBoxes);
   const setSize = useStoreActions((actions) => actions.setSize);
+  const setTime = useStoreActions((actions) => actions.setTime);
 
   const [pxRef, setPxRef] = useState(pxWidth);
   const [cmRef, setCmRef] = useState(cmWidth);
   const [boxesRef, setBoxesRef] = useState(boxes);
   const [sizeRef, setSizeRef] = useState(size);
+  const [timeRef, setTimeRef] = useState(time);
 
   const handleSave = () => {
     setPxWidth(pxRef);
     setCmWidth(cmRef);
     setBoxes(boxesRef);
     setSize(sizeRef);
+    setTime(timeRef);
 
     setSavedStorage("pxWidth", pxRef);
     setSavedStorage("cmWidth", cmRef);
     setSavedStorage("boxes", boxesRef);
     setSavedStorage("size", sizeRef);
+    setSavedStorage("timer", timeRef);
     setMessage(" ... going home");
     setLoading(true);
     setTimeout(() => navigate("/home"), 1000);
@@ -58,7 +63,7 @@ const Config = () => {
             </div>
           </div>
           <div className="field">
-            <label className="label">Width of screen in pixels</label>
+            <label className="label">Width of screen in pixels.</label>
             <div className="control">
               <input
                 className="input"
@@ -70,7 +75,7 @@ const Config = () => {
             </div>
           </div>
           <div className="field">
-            <label className="label">Width of screen in centimeters</label>
+            <label className="label">Width of screen in centimeters.</label>
             <div className="control">
               <input
                 className="input"
@@ -82,7 +87,7 @@ const Config = () => {
             </div>
           </div>
           <div className="field">
-            <label className="label">Size of box in cm</label>
+            <label className="label">Size of box in cm.</label>
             <div className="control is-flex">
               <input
                 className="input"
@@ -90,6 +95,7 @@ const Config = () => {
                 placeholder="7"
                 value={sizeRef[0]}
                 onChange={(e) => setSizeRef([e.target.value, sizeRef[1]])}
+                title="Width"
               />
               <input
                 className="input ml-4"
@@ -97,6 +103,42 @@ const Config = () => {
                 placeholder="2"
                 value={sizeRef[1]}
                 onChange={(e) => setSizeRef([sizeRef[0], e.target.value])}
+                title="Height"
+              />
+            </div>
+          </div>
+          <div className="field">
+            <label className="label">Process time in min.</label>
+            <div className="control is-flex">
+              <input
+                className="input"
+                type="number"
+                placeholder="15"
+                value={timeRef.ready}
+                title="Ready to read time"
+                onChange={(e) =>
+                  setTimeRef({ ...timeRef, ready: e.target.value })
+                }
+              />
+              <input
+                className="input ml-4"
+                type="number"
+                placeholder="19"
+                value={timeRef.alarm}
+                title="Alarm time"
+                onChange={(e) =>
+                  setTimeRef({ ...timeRef, alarm: e.target.value })
+                }
+              />
+              <input
+                className="input ml-4"
+                type="number"
+                placeholder="20"
+                value={timeRef.limit}
+                title="Maximum time to get reading"
+                onChange={(e) =>
+                  setTimeRef({ ...timeRef, limit: e.target.value })
+                }
               />
             </div>
           </div>

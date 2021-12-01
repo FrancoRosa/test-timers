@@ -3,9 +3,6 @@ import { useEffect, useState } from "react";
 import { beepSound } from "../js/helpers";
 
 const Box = () => {
-  const finalCount = 5;
-  const maxCount = 10;
-  const alarmCount = 8;
   const [counter, setCounter] = useState(0);
   const [progress, setProgress] = useState(true);
   const [modal, setModal] = useState(false);
@@ -15,9 +12,11 @@ const Box = () => {
   const pxWidth = useStoreState((state) => state.pxWidth);
   const cmWidth = useStoreState((state) => state.cmWidth);
   const clock = useStoreState((state) => state.clock);
+  const time = useStoreState((state) => state.time);
+  const { ready, limit, alarm } = time;
 
-  const conv = pxWidth / cmWidth;
-  const sizePx = [parseInt(size[0] * conv), parseInt(size[1] * conv)];
+  const ratio = pxWidth / cmWidth;
+  const sizePx = [parseInt(size[0] * ratio), parseInt(size[1] * ratio)];
 
   const boxStyle = {
     height: sizePx[1],
@@ -45,12 +44,12 @@ const Box = () => {
     if (status !== "free") {
       setCounter(counter + 1);
     }
-    if (counter >= finalCount) {
+    if (counter >= ready) {
       setStatus("finished");
       setProgress(false);
     }
-    if (counter >= maxCount) setStatus("overtime");
-    if (counter >= alarmCount) beepSound.play();
+    if (counter >= limit) setStatus("overtime");
+    if (counter >= alarm) beepSound.play();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clock]);
 
@@ -78,7 +77,7 @@ const Box = () => {
         </div>
         <progress
           className={`progress is-info mt-2 ${!progress && "pointer"}`}
-          max={finalCount}
+          max={ready}
           value={counter}
           onClick={!progress && (() => setModal(true))}
         />

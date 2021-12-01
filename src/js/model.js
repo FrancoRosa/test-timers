@@ -9,6 +9,11 @@ const initial = {
   cmWidth: 41,
   boxes: 10,
   size: [7, 2],
+  time: {
+    ready: 15,
+    alarm: 19,
+    limit: 20,
+  },
 };
 
 const model = {
@@ -30,6 +35,11 @@ const model = {
   size: getSavedStorage("size"),
   setSize: action((state, size) => {
     state.size = size;
+  }),
+
+  time: getSavedStorage("time"),
+  setTime: action((state, time) => {
+    state.time = time;
   }),
 
   clock: Date(),
