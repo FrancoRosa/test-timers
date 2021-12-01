@@ -51,6 +51,7 @@ const Box = () => {
     }
     if (counter >= maxCount) setStatus("overtime");
     if (counter >= alarmCount) beepSound.play();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clock]);
 
   return (
