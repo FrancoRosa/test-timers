@@ -8,7 +8,7 @@ const store = createStore(model);
 
 const App = () => {
   return (
-    <div className="container">
+    <div>
       <StoreProvider store={store}>
         <Routes>
           <Route path="home" element={<Home />} />

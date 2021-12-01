@@ -1,23 +1,108 @@
 import { useStoreState } from "easy-peasy";
+import { useEffect, useState } from "react";
+import { beepSound } from "../js/helpers";
 
 const Box = () => {
+  const finalCount = 5;
+  const maxCount = 10;
+  const alarmCount = 8;
+  const [counter, setCounter] = useState(0);
+  const [progress, setProgress] = useState(true);
+  const [modal, setModal] = useState(false);
+  const [status, setStatus] = useState("free"); // free - counting - finished - overtime
+
   const size = useStoreState((state) => state.size);
   const pxWidth = useStoreState((state) => state.pxWidth);
   const cmWidth = useStoreState((state) => state.cmWidth);
+  const clock = useStoreState((state) => state.clock);
 
   const conv = pxWidth / cmWidth;
   const sizePx = [parseInt(size[0] * conv), parseInt(size[1] * conv)];
-  console.log(sizePx);
 
   const boxStyle = {
     height: sizePx[1],
     width: sizePx[0],
+    minHeight: sizePx[1],
+    minWidth: sizePx[0],
   };
+
+  useEffect(() => {
+    if (status !== "free") {
+      setCounter(counter + 1);
+    }
+    if (counter >= finalCount) {
+      setStatus("finished");
+      setProgress(false);
+    }
+    if (counter >= maxCount) setStatus("overtime");
+    if (counter >= alarmCount) beepSound.play();
+  }, [clock]);
+
   return (
-    <div className="box" style={boxStyle}>
-      <h1>This is Home</h1>
-      <p>This is another brick in the wall</p>
-    </div>
+    <>
+      <div
+        className={`out-box animate__animated has-background-${
+          (status === "free" && "success") ||
+          (status === "counting" && "warning") ||
+          (status === "finished" && "danger") ||
+          (status === "overtime" && "danger")
+        } ${status === "overtime" && "animate__flash animate__infinite"}`}
+      >
+        <div
+          className={`is-flex is-flex-centered has-background-black`}
+          style={boxStyle}
+        >
+          <button className="button m-1" onClick={() => setStatus("counting")}>
+            {">"}
+          </button>
+          <button
+            className="button m-1"
+            onClick={() => {
+              setStatus("free");
+              setCounter(0);
+              setProgress(true);
+            }}
+          >
+            {"[]"}
+          </button>
+          <button className="button m-1">{counter}</button>
+        </div>
+        <progress
+          className={`progress is-info mt-2 ${!progress && "pointer"}`}
+          max={finalCount}
+          value={counter}
+          onClick={!progress && (() => setModal(true))}
+        />
+      </div>
+      <div className={`modal ${modal && "is-active"}`}>
+        <div className="modal-background"></div>
+        <div className="modal-content is-flex is-flex-column">
+          <button
+            className="button is-success is-large is-outlined m-4"
+            onClick={() => setModal(false)}
+          >
+            Negative
+          </button>
+          <button
+            className="button is-danger is-large is-outlined m-4"
+            onClick={() => setModal(false)}
+          >
+            Positive
+          </button>
+          <button
+            className="button is-warning is-large is-outlined m-4"
+            onClick={() => setModal(false)}
+          >
+            Invalid
+          </button>
+        </div>
+        <button
+          className="modal-close is-large"
+          aria-label="close"
+          onClick={() => setModal(false)}
+        ></button>
+      </div>
+    </>
   );
 };
 

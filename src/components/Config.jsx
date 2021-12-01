@@ -2,8 +2,13 @@ import Navigator from "./Navigator";
 import { useStoreState, useStoreActions } from "easy-peasy";
 import { useState } from "react";
 import { setSavedStorage } from "../js/helpers";
+import { useNavigate } from "react-router";
 
 const Config = () => {
+  let navigate = useNavigate();
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const pxWidth = useStoreState((state) => state.pxWidth);
   const cmWidth = useStoreState((state) => state.cmWidth);
   const boxes = useStoreState((state) => state.boxes);
@@ -29,6 +34,9 @@ const Config = () => {
     setSavedStorage("cmWidth", cmRef);
     setSavedStorage("boxes", boxesRef);
     setSavedStorage("size", sizeRef);
+    setMessage(" ... going home");
+    setLoading(true);
+    setTimeout(() => navigate("/home"), 1000);
   };
 
   return (
@@ -94,10 +102,13 @@ const Config = () => {
           </div>
           <button
             onClick={handleSave}
-            className="button is-success is-outlined mt-4"
+            className={`button is-success is-outlined mt-4 ${
+              loading && "is-loading"
+            }`}
           >
             Save
           </button>
+          <p className="help">{message}</p>
         </div>
       </div>
     </>

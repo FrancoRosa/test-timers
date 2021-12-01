@@ -1,15 +1,23 @@
-import { useStoreState } from "easy-peasy";
+import { useStoreActions, useStoreState } from "easy-peasy";
 import Navigator from "./Navigator";
 import Box from "./Box";
+import { useEffect } from "react";
 
 const Home = () => {
   const boxes = useStoreState((state) => state.boxes);
+  const setClock = useStoreActions((action) => action.setClock);
   const elements = [...Array(parseInt(boxes)).keys()];
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setClock(Date());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div>
-      <h1>This is Home</h1>
-      <p>This is another brick in the wall</p>
+    <div className="box-container">
       {elements.map((x) => (
         <Box key={x} />
       ))}

@@ -31,6 +31,11 @@ const model = {
   setSize: action((state, size) => {
     state.size = size;
   }),
+
+  clock: Date(),
+  setClock: action((state, clock) => {
+    state.clock = clock;
+  }),
 };
 
 export default model;
