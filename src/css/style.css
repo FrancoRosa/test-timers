@@ -43,6 +43,12 @@ body {
   right: 0.5em;
 }
 
+.wifi {
+  position: absolute;
+  top: 0.5em;
+  left: 0.5em;
+}
+
 .config {
   height: 90vh;
 }

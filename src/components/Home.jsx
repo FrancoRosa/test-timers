@@ -4,6 +4,7 @@ import Box from "./Box";
 import { useEffect } from "react";
 import { useState } from "react/cjs/react.development";
 import ResultOptions from "./ResultOptions";
+import Wifi from "./Wifi";
 
 const Home = () => {
   const boxes = useStoreState((state) => state.boxes);
@@ -27,14 +28,12 @@ const Home = () => {
   const setReady = (id, ready) => {
     let tempBoxes = [...testBoxes];
     tempBoxes[id].ready = ready;
-    console.log("set ready: ", id, ready);
   };
 
   const setFree = (id) => {
     let tempBoxes = [...testBoxes];
     tempBoxes[id].barcode = null;
     setTestBoxes(tempBoxes);
-    console.log("set free", id);
   };
 
   const handleResponse = () => {
@@ -129,6 +128,7 @@ const Home = () => {
           <Box key={x.id} test={x} setReady={setReady} setFree={setFree} />
         ))}
         <Navigator to="/config" />
+        <Wifi />
       </div>
     </>
   );
