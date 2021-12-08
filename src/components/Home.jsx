@@ -1,8 +1,7 @@
 import { useStoreActions, useStoreState } from "easy-peasy";
 import Navigator from "./Navigator";
 import Box from "./Box";
-import { useEffect } from "react";
-import { useState } from "react/cjs/react.development";
+import { useEffect, useState } from "react";
 import ResultOptions from "./ResultOptions";
 import Wifi from "./Wifi";
 
@@ -13,10 +12,14 @@ const Home = () => {
   const elements = [...Array(parseInt(boxes)).keys()];
   const initBoxes = [];
   elements.forEach((element) => {
-    initBoxes.push({ id: element, barcode: null, ready: false });
+    initBoxes.push({
+      id: element,
+      barcode: null,
+      ready: false,
+    });
   });
 
-  const [number, setNumber] = useState("");
+  const [numberCode, setNumberCode] = useState("");
   const [code, setCode] = useState("");
   const [message, setMessage] = useState("Scan a test");
   const [barcode, setBarcode] = useState("");
@@ -57,10 +60,10 @@ const Home = () => {
 
   useEffect(() => {
     const now = Date.now();
-    setCode(`${now - lastTime > 500 ? "" : code}${number}`);
+    setCode(`${now - lastTime > 500 ? "" : code}${numberCode}`);
     setLastTime(now);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [number]);
+  }, [numberCode]);
 
   useEffect(() => {
     const now = Date.now();
@@ -96,7 +99,7 @@ const Home = () => {
 
   useEffect(() => {
     const scannerHandler = (e) => {
-      setNumber(e.key);
+      setNumberCode(e.key);
     };
 
     const interval = setInterval(() => {
