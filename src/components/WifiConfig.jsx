@@ -4,7 +4,6 @@ import { useNavigate } from "react-router";
 
 const WifiConfig = () => {
   let navigate = useNavigate();
-  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSave = () => {
@@ -52,7 +51,7 @@ const WifiConfig = () => {
           >
             Save
           </button>
-          <p className="help">{message}</p>
+          <p className="help">{""}</p>
         </div>
       </div>
     </>

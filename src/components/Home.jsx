@@ -91,6 +91,7 @@ const Home = () => {
       setTestBoxes(tempBoxes);
       setCode("");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clock]);
 
   useEffect(() => {

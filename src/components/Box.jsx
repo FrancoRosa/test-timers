@@ -51,6 +51,7 @@ const Box = ({ test, setReady, setFree }) => {
   useEffect(() => {
     if (barcode !== null) handleStart();
     else handleStop();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [barcode]);
 
   return (
