@@ -18,6 +18,7 @@ const Home = () => {
   const [code, setCode] = useState("");
   const [message, setMessage] = useState("Scan a test");
   const [barcode, setBarcode] = useState("");
+  const [display, setDisplay] = useState(false);
   const [lastTime, setLastTime] = useState(Date.now());
 
   const [testBoxes, setTestBoxes] = useState(initBoxes);
@@ -33,6 +34,25 @@ const Home = () => {
     tempBoxes[id].barcode = null;
     setTestBoxes(tempBoxes);
     console.log("set free", id);
+  };
+
+  const handleResponse = () => {
+    setDisplay(false);
+    setMessage("");
+    console.log(barcode);
+    let target = testBoxes.find((x) => x.barcode === barcode);
+    setFree(target.id);
+    setReady(target.id, false);
+  };
+
+  const handleInvalid = () => {
+    handleResponse();
+  };
+  const handlePositive = () => {
+    handleResponse();
+  };
+  const handleNegative = () => {
+    handleResponse();
   };
 
   useEffect(() => {
@@ -61,7 +81,10 @@ const Home = () => {
       } else {
         let box = testBoxes.find((x) => x.barcode === code);
         if (box.ready) {
-          setMessage(`Test ${code} is ready`);
+          setMessage(`Test ${code} is ready, select an option:`);
+          setDisplay(true);
+          //displayOptions
+          //make box free
         } else {
           setMessage(`Test ${code} is not ready`);
         }
@@ -92,8 +115,31 @@ const Home = () => {
 
   return (
     <>
-      <p className="has-text-centered title barcode">{message}</p>
-
+      <header>
+        <p className="has-text-centered title mt-4">{message}</p>
+        {display && (
+          <div className="field is-grouped mt-4">
+            <button
+              onClick={handleNegative}
+              className="button is-large is-outlined is-success"
+            >
+              Negative
+            </button>
+            <button
+              onClick={handlePositive}
+              className="button is-large ml-4 is-outlined is-danger"
+            >
+              Positive
+            </button>
+            <button
+              onClick={handleInvalid}
+              className="button is-large ml-4 is-outlined is-warning"
+            >
+              Invalid
+            </button>
+          </div>
+        )}
+      </header>
       <div className="box-container">
         {testBoxes.map((x) => (
           <Box key={x.id} test={x} setReady={setReady} setFree={setFree} />

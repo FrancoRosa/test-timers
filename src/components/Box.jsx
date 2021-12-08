@@ -60,6 +60,7 @@ const Box = ({ test, setReady, setFree }) => {
 
   useEffect(() => {
     if (barcode !== null) handleStart();
+    else handleStop();
   }, [barcode]);
 
   return (
@@ -72,18 +73,28 @@ const Box = ({ test, setReady, setFree }) => {
           (status === "overtime" && "danger")
         } ${status === "overtime" && "animate__flash animate__infinite"}`}
       >
-        <p className="help"> - {barcode} - </p>
         <div
-          className={`is-flex is-flex-centered has-background-black`}
+          className={`is-flex is-flex-centered has-background-black is-flex-column`}
           style={boxStyle}
         >
-          <button className="button m-1" onClick={handleStart}>
-            {">"}
-          </button>
-          <button className="button m-1" onClick={handleStop}>
-            {"[]"}
-          </button>
-          <button className="button m-1">{counter}</button>
+          <p className="help is-success box-code is-size-4">{barcode}</p>
+          <div className="field is-grouped">
+            <button
+              className="button m-1 is-small is-rounded"
+              onClick={handleStart}
+            >
+              {">"}
+            </button>
+            <button
+              className="button m-1 is-small is-rounded"
+              onClick={handleStop}
+            >
+              {"[]"}
+            </button>
+            <button className="button m-1 is-small is-rounded">
+              {counter}
+            </button>
+          </div>
         </div>
         <progress
           className={`progress is-info mt-2 ${!progress && "pointer"}`}

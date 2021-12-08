@@ -79,8 +79,14 @@ progress {
   cursor: pointer;
 }
 
-.barcode {
+header {
   position: absolute;
-  right: 50vw;
-  top: 0.25em;
+  width: 100vw;
+  display: flex;
+  justify-content: space-around;
+}
+
+.is-small {
+  height: 2em;
+  width: 2em;
 }
