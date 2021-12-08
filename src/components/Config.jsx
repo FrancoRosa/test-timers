@@ -38,7 +38,7 @@ const Config = () => {
     setSavedStorage("cmWidth", cmRef);
     setSavedStorage("boxes", boxesRef);
     setSavedStorage("size", sizeRef);
-    setSavedStorage("timer", timeRef);
+    setSavedStorage("time", timeRef);
     setMessage(" ... going home");
     setLoading(true);
     setTimeout(() => navigate("/home"), 1000);

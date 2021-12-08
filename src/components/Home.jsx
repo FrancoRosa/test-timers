@@ -3,6 +3,7 @@ import Navigator from "./Navigator";
 import Box from "./Box";
 import { useEffect } from "react";
 import { useState } from "react/cjs/react.development";
+import ResultOptions from "./ResultOptions";
 
 const Home = () => {
   const boxes = useStoreState((state) => state.boxes);
@@ -83,8 +84,6 @@ const Home = () => {
         if (box.ready) {
           setMessage(`Test ${code} is ready, select an option:`);
           setDisplay(true);
-          //displayOptions
-          //make box free
         } else {
           setMessage(`Test ${code} is not ready`);
         }
@@ -118,26 +117,11 @@ const Home = () => {
       <header>
         <p className="has-text-centered title mt-4">{message}</p>
         {display && (
-          <div className="field is-grouped mt-4">
-            <button
-              onClick={handleNegative}
-              className="button is-large is-outlined is-success"
-            >
-              Negative
-            </button>
-            <button
-              onClick={handlePositive}
-              className="button is-large ml-4 is-outlined is-danger"
-            >
-              Positive
-            </button>
-            <button
-              onClick={handleInvalid}
-              className="button is-large ml-4 is-outlined is-warning"
-            >
-              Invalid
-            </button>
-          </div>
+          <ResultOptions
+            handleNegative={handleNegative}
+            handlePositive={handlePositive}
+            handleInvalid={handleInvalid}
+          />
         )}
       </header>
       <div className="box-container">

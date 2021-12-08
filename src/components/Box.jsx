@@ -5,8 +5,6 @@ import { beepSound } from "../js/helpers";
 const Box = ({ test, setReady, setFree }) => {
   const { id, barcode } = test;
   const [counter, setCounter] = useState(0);
-  const [progress, setProgress] = useState(true);
-  const [modal, setModal] = useState(false);
   const [status, setStatus] = useState("free"); // free - counting - finished - overtime
 
   const size = useStoreState((state) => state.size);
@@ -33,15 +31,8 @@ const Box = ({ test, setReady, setFree }) => {
   const handleStop = () => {
     setStatus("free");
     setCounter(0);
-    setProgress(true);
     setReady(id, false);
     setFree(id);
-  };
-
-  const handleResponse = () => {
-    setModal(false);
-    handleStop();
-    setReady();
   };
 
   useEffect(() => {
@@ -50,7 +41,6 @@ const Box = ({ test, setReady, setFree }) => {
     }
     if (counter >= ready) {
       setStatus("finished");
-      setProgress(false);
       setReady(id, true);
     }
     if (counter >= limit) setStatus("overtime");
@@ -97,39 +87,10 @@ const Box = ({ test, setReady, setFree }) => {
           </div>
         </div>
         <progress
-          className={`progress is-info mt-2 ${!progress && "pointer"}`}
+          className={`progress is-info mt-2`}
           max={ready}
           value={counter}
-          onClick={!progress && (() => setModal(true))}
         />
-      </div>
-      <div className={`modal ${modal && "is-active"}`}>
-        <div className="modal-background"></div>
-        <div className="modal-content is-flex is-flex-column">
-          <button
-            className="button is-success is-large is-outlined m-4"
-            onClick={handleResponse}
-          >
-            Negative
-          </button>
-          <button
-            className="button is-danger is-large is-outlined m-4"
-            onClick={handleResponse}
-          >
-            Positive
-          </button>
-          <button
-            className="button is-warning is-large is-outlined m-4"
-            onClick={handleResponse}
-          >
-            Invalid
-          </button>
-        </div>
-        <button
-          className="modal-close is-large"
-          aria-label="close"
-          onClick={() => setModal(false)}
-        ></button>
       </div>
     </>
   );
