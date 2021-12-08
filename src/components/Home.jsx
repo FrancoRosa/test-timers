@@ -100,7 +100,7 @@ const Home = () => {
   useEffect(() => {
     const scannerHandler = (e) => {
       console.log(e.key);
-      if (e.key.length == 1) setNumberCode(e.key);
+      if (e.key.length === 1) setNumberCode(e.key);
     };
 
     const interval = setInterval(() => {
