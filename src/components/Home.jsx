@@ -11,15 +11,29 @@ const Home = () => {
   const elements = [...Array(parseInt(boxes)).keys()];
   const initBoxes = [];
   elements.forEach((element) => {
-    initBoxes.push({ id: element, barcode: null });
+    initBoxes.push({ id: element, barcode: null, ready: false });
   });
 
   const [number, setNumber] = useState("");
   const [code, setCode] = useState("");
+  const [message, setMessage] = useState("Scan a test");
   const [barcode, setBarcode] = useState("");
   const [lastTime, setLastTime] = useState(Date.now());
 
   const [testBoxes, setTestBoxes] = useState(initBoxes);
+
+  const setReady = (id, ready) => {
+    let tempBoxes = [...testBoxes];
+    tempBoxes[id].ready = ready;
+    console.log("set ready: ", id, ready);
+  };
+
+  const setFree = (id) => {
+    let tempBoxes = [...testBoxes];
+    tempBoxes[id].barcode = null;
+    setTestBoxes(tempBoxes);
+    console.log("set free", id);
+  };
 
   useEffect(() => {
     const now = Date.now();
@@ -33,15 +47,28 @@ const Home = () => {
     if (now - lastTime > 500 && code !== "") {
       setBarcode(code);
       let tempBoxes = [...testBoxes];
-      let availableBox = tempBoxes.map((x) => x.barcode).indexOf(null);
-      if (availableBox >= 0) {
-        testBoxes[availableBox].barcode = code;
+      let currentTests = tempBoxes.map((x) => x.barcode);
+      let availableBox = currentTests.indexOf(null);
+      let isNew = !currentTests.includes(code);
+
+      if (isNew) {
+        if (availableBox >= 0) {
+          testBoxes[availableBox].barcode = code;
+          setMessage("Starting timer for test: " + code);
+        } else {
+          setMessage("No box available for: " + code);
+        }
       } else {
-        console.log(".. no empty boxes available");
+        let box = testBoxes.find((x) => x.barcode === code);
+        if (box.ready) {
+          setMessage(`Test ${code} is ready`);
+        } else {
+          setMessage(`Test ${code} is not ready`);
+        }
       }
+
       setTestBoxes(tempBoxes);
       setCode("");
-      // APPEND BARCODE AND START COUNTING
     }
   }, [clock]);
 
@@ -65,11 +92,11 @@ const Home = () => {
 
   return (
     <>
-      <p className="has-text-centered title barcode">{code}</p>
+      <p className="has-text-centered title barcode">{message}</p>
 
       <div className="box-container">
         {testBoxes.map((x) => (
-          <Box key={x.id} barcode={x.barcode} />
+          <Box key={x.id} test={x} setReady={setReady} setFree={setFree} />
         ))}
         <Navigator to="/config" />
       </div>

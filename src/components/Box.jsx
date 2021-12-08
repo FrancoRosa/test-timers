@@ -2,7 +2,8 @@ import { useStoreState } from "easy-peasy";
 import { useEffect, useState } from "react";
 import { beepSound } from "../js/helpers";
 
-const Box = ({ barcode }) => {
+const Box = ({ test, setReady, setFree }) => {
+  const { id, barcode } = test;
   const [counter, setCounter] = useState(0);
   const [progress, setProgress] = useState(true);
   const [modal, setModal] = useState(false);
@@ -33,11 +34,14 @@ const Box = ({ barcode }) => {
     setStatus("free");
     setCounter(0);
     setProgress(true);
+    setReady(id, false);
+    setFree(id);
   };
 
   const handleResponse = () => {
     setModal(false);
     handleStop();
+    setReady();
   };
 
   useEffect(() => {
@@ -47,6 +51,7 @@ const Box = ({ barcode }) => {
     if (counter >= ready) {
       setStatus("finished");
       setProgress(false);
+      setReady(id, true);
     }
     if (counter >= limit) setStatus("overtime");
     if (counter >= alarm) beepSound.play();
