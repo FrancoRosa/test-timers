@@ -99,7 +99,8 @@ const Home = () => {
 
   useEffect(() => {
     const scannerHandler = (e) => {
-      setNumberCode(e.key);
+      console.log(e.key);
+      if (e.key.length == 1) setNumberCode(e.key);
     };
 
     const interval = setInterval(() => {
@@ -116,7 +117,7 @@ const Home = () => {
   }, []);
 
   return (
-    <>
+    <div className="home-container">
       <header>
         <p className="has-text-centered title mt-4">{message}</p>
         {display && (
@@ -134,7 +135,7 @@ const Home = () => {
         <Navigator to="/config" />
         <Wifi />
       </div>
-    </>
+    </div>
   );
 };
 
