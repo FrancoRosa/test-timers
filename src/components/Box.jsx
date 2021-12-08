@@ -2,7 +2,7 @@ import { useStoreState } from "easy-peasy";
 import { useEffect, useState } from "react";
 import { beepSound } from "../js/helpers";
 
-const Box = () => {
+const Box = ({ barcode }) => {
   const [counter, setCounter] = useState(0);
   const [progress, setProgress] = useState(true);
   const [modal, setModal] = useState(false);
@@ -25,7 +25,7 @@ const Box = () => {
     minWidth: sizePx[0],
   };
 
-  const handlePlay = () => {
+  const handleStart = () => {
     setStatus("counting");
   };
 
@@ -53,6 +53,10 @@ const Box = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clock]);
 
+  useEffect(() => {
+    if (barcode !== null) handleStart();
+  }, [barcode]);
+
   return (
     <>
       <div
@@ -63,11 +67,12 @@ const Box = () => {
           (status === "overtime" && "danger")
         } ${status === "overtime" && "animate__flash animate__infinite"}`}
       >
+        <p className="help"> - {barcode} - </p>
         <div
           className={`is-flex is-flex-centered has-background-black`}
           style={boxStyle}
         >
-          <button className="button m-1" onClick={handlePlay}>
+          <button className="button m-1" onClick={handleStart}>
             {">"}
           </button>
           <button className="button m-1" onClick={handleStop}>
