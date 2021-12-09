@@ -4,7 +4,7 @@ import { useState } from "react";
 import { setSavedStorage } from "../js/helpers";
 import { useNavigate } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCog, faPlus, faPowerOff } from "@fortawesome/free-solid-svg-icons";
+import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
 import Modal from "./Modal";
 
 const Config = () => {

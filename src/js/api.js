@@ -44,3 +44,10 @@ export const getDeviceId = async () => {
   const response = await axios.get(url);
   return response.data;
 };
+
+export const getCommit = async () => {
+  console.log("... get git commit");
+  const url = `${localhost}/git/commit`;
+  const response = await axios.get(url);
+  return response.data;
+};

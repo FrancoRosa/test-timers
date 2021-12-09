@@ -1,18 +1,19 @@
 import Navigator from "./Navigator";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router";
+import { networkSave } from "../js/api";
 
 const WifiConfig = () => {
   let navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const ssidRef = useRef();
+  const passRef = useRef();
 
   const handleSave = () => {
     setLoading(true);
+    networkSave(ssidRef.current.value, passRef.current.value);
     setTimeout(() => navigate("/home"), 1000);
   };
-
-  const ssidRef = useRef();
-  const passRef = useRef();
 
   return (
     <>
@@ -36,7 +37,7 @@ const WifiConfig = () => {
             <div className="control">
               <input
                 className="input"
-                type="password"
+                type="text"
                 placeholder="********"
                 ref={passRef}
               />
