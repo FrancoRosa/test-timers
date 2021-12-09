@@ -18,6 +18,7 @@ const Home = () => {
       id: element,
       barcode: null,
       ready: false,
+      start: null,
     });
   });
 
@@ -49,19 +50,21 @@ const Home = () => {
     let target = testBoxes.find((x) => x.barcode === barcode);
     setFree(target.id);
     setReady(target.id, false);
+    let end = Date.now();
+    return { start: target.start, end };
   };
 
   const handleInvalid = () => {
-    handleResponse();
-    sendResult(barcode, "invalid", id);
+    const { start, end } = handleResponse();
+    sendResult(barcode, "invalid", id, start, end);
   };
   const handlePositive = () => {
-    handleResponse();
-    sendResult(barcode, "positive", id);
+    const { start, end } = handleResponse();
+    sendResult(barcode, "positive", id, start, end);
   };
   const handleNegative = () => {
-    handleResponse();
-    sendResult(barcode, "negative", id);
+    const { start, end } = handleResponse();
+    sendResult(barcode, "negative", id, start, end);
   };
 
   useEffect(() => {
@@ -84,6 +87,7 @@ const Home = () => {
         setDisplay(false);
         if (availableBox >= 0) {
           testBoxes[availableBox].barcode = code;
+          testBoxes[availableBox].start = Date.now();
           setMessage("Starting timer for test: " + code);
         } else {
           setMessage("No box available for: " + code);
@@ -105,7 +109,7 @@ const Home = () => {
   }, [clock]);
 
   useEffect(() => {
-    getDeviceId().then((res) => setId(res));
+    getDeviceId().then((res) => setId(res.id));
 
     const scannerHandler = (e) => {
       if (e.key.length === 1) setNumberCode(e.key);
@@ -146,7 +150,10 @@ const Home = () => {
         {testBoxes.map((x) => (
           <Box key={x.id} test={x} setReady={setReady} setFree={setFree} />
         ))}
-        <Navigator to="/config" />
+        <Navigator
+          to="/config"
+          onClick={() => console.log("Clicked Navigator")}
+        />
         <Wifi />
       </div>
     </div>

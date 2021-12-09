@@ -1,11 +1,12 @@
 import Navigator from "./Navigator";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { networkSave } from "../js/api";
+import { networkSave, networkScan } from "../js/api";
 
 const WifiConfig = () => {
   let navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [networks, setNetworks] = useState([]);
   const ssidRef = useRef();
   const passRef = useRef();
 
@@ -14,6 +15,10 @@ const WifiConfig = () => {
     networkSave(ssidRef.current.value, passRef.current.value);
     setTimeout(() => navigate("/home"), 1000);
   };
+
+  useEffect(() => {
+    networkScan().then((res) => setNetworks(res.networks));
+  }, []);
 
   return (
     <>
@@ -53,6 +58,23 @@ const WifiConfig = () => {
             Save
           </button>
           <p className="help">{""}</p>
+          <p className="mt-4 has-text-centered">Available networks</p>
+          <table className="table is-striped is-fullwidth">
+            <thead>
+              <tr>
+                <th> SSID </th>
+                <th> SNR </th>
+              </tr>
+            </thead>
+            <tbody>
+              {networks.map((n) => (
+                <tr>
+                  <td>{n.ssid}</td>
+                  <td>{n.snr}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </>

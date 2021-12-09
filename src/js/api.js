@@ -3,8 +3,9 @@ import axios from "axios";
 const localhost = `http://${window.location.hostname}:9999`;
 const remotehost = `http://${window.location.hostname}:10000`;
 
-export const sendResult = async (barcode, result, id) => {
-  console.log("... sending results");
+export const sendResult = async (barcode, result, id, start, end) => {
+  const payload = { id, barcode, result, start, end };
+  console.log("... sending results:", payload);
   const url = `${remotehost}/result`;
   const response = await axios.post(url, { barcode, result, id });
   return response.data;
@@ -39,9 +40,10 @@ export const restart = async () => {
 };
 
 export const getDeviceId = async () => {
-  console.log("... restarting");
+  console.log("... get device ID");
   const url = `${localhost}/device/id`;
   const response = await axios.get(url);
+  console.log(response.data);
   return response.data;
 };
 

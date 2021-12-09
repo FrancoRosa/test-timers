@@ -1,10 +1,11 @@
-import Navigator from "./Navigator";
 import { useStoreState, useStoreActions } from "easy-peasy";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { setSavedStorage } from "../js/helpers";
 import { useNavigate } from "react-router";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
+import { getCommit, getDeviceId } from "../js/api";
+import Navigator from "./Navigator";
 import Modal from "./Modal";
 
 const Config = () => {
@@ -12,6 +13,8 @@ const Config = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [power, setPower] = useState(false);
+  const [rpiId, setRpiId] = useState("");
+  const [commitDate, setCommitDate] = useState("");
 
   const pxWidth = useStoreState((state) => state.pxWidth);
   const cmWidth = useStoreState((state) => state.cmWidth);
@@ -51,6 +54,11 @@ const Config = () => {
   const handlePower = () => {
     console.log("... powering off");
   };
+
+  useEffect(() => {
+    getDeviceId().then((res) => setRpiId(res.id));
+    getCommit().then((res) => setCommitDate(res.commit.date));
+  });
 
   return (
     <>
@@ -159,7 +167,7 @@ const Config = () => {
             Save
           </button>
           <p className="help">{message}</p>
-          <div className="is-flex is-flex-centered mt-4 ">
+          <div className="is-flex is-flex-centered m-4 ">
             <FontAwesomeIcon
               icon={faPowerOff}
               className="has-text-danger pointer"
@@ -173,6 +181,10 @@ const Config = () => {
               title="Do you want to shutdown?"
               confirm="Shutdown"
             />
+          </div>
+          <div className="is-flex mt-4 is-flex-between">
+            <p className="has-text-grey mt-4">ID: {rpiId}</p>
+            <p className="has-text-grey mt-4">Version: {commitDate}</p>
           </div>
         </div>
       </div>
