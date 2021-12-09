@@ -3,11 +3,15 @@ import { useStoreState, useStoreActions } from "easy-peasy";
 import { useState } from "react";
 import { setSavedStorage } from "../js/helpers";
 import { useNavigate } from "react-router";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCog, faPlus, faPowerOff } from "@fortawesome/free-solid-svg-icons";
+import Modal from "./Modal";
 
 const Config = () => {
   let navigate = useNavigate();
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [power, setPower] = useState(false);
 
   const pxWidth = useStoreState((state) => state.pxWidth);
   const cmWidth = useStoreState((state) => state.cmWidth);
@@ -42,6 +46,10 @@ const Config = () => {
     setMessage(" ... going home");
     setLoading(true);
     setTimeout(() => navigate("/home"), 1000);
+  };
+
+  const handlePower = () => {
+    console.log("... powering off");
   };
 
   return (
@@ -151,6 +159,21 @@ const Config = () => {
             Save
           </button>
           <p className="help">{message}</p>
+          <div className="is-flex is-flex-centered mt-4 ">
+            <FontAwesomeIcon
+              icon={faPowerOff}
+              className="has-text-danger pointer"
+              size="lg"
+              onClick={() => setPower(true)}
+            />
+            <Modal
+              active={power}
+              setActive={setPower}
+              setAction={handlePower}
+              title="Do you want to shutdown?"
+              confirm="Shutdown"
+            />
+          </div>
         </div>
       </div>
     </>

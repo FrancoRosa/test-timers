@@ -1,7 +1,8 @@
 import { useStoreActions, useStoreState } from "easy-peasy";
+import { useEffect, useState } from "react";
+import { getDeviceId, sendResult } from "../js/api";
 import Navigator from "./Navigator";
 import Box from "./Box";
-import { useEffect, useState } from "react";
 import ResultOptions from "./ResultOptions";
 import Wifi from "./Wifi";
 
@@ -9,6 +10,7 @@ const Home = () => {
   const boxes = useStoreState((state) => state.boxes);
   const clock = useStoreState((state) => state.clock);
   const setClock = useStoreActions((action) => action.setClock);
+  const setNetwork = useStoreActions((action) => action.setNetwork);
   const elements = [...Array(parseInt(boxes)).keys()];
   const initBoxes = [];
   elements.forEach((element) => {
@@ -27,6 +29,7 @@ const Home = () => {
   const [lastTime, setLastTime] = useState(Date.now());
 
   const [testBoxes, setTestBoxes] = useState(initBoxes);
+  const [id, setId] = useState("");
 
   const setReady = (id, ready) => {
     let tempBoxes = [...testBoxes];
@@ -50,12 +53,15 @@ const Home = () => {
 
   const handleInvalid = () => {
     handleResponse();
+    sendResult(barcode, "invalid", id);
   };
   const handlePositive = () => {
     handleResponse();
+    sendResult(barcode, "positive", id);
   };
   const handleNegative = () => {
     handleResponse();
+    sendResult(barcode, "negative", id);
   };
 
   useEffect(() => {
@@ -75,6 +81,7 @@ const Home = () => {
       let isNew = !currentTests.includes(code);
 
       if (isNew) {
+        setDisplay(false);
         if (availableBox >= 0) {
           testBoxes[availableBox].barcode = code;
           setMessage("Starting timer for test: " + code);
@@ -98,19 +105,26 @@ const Home = () => {
   }, [clock]);
 
   useEffect(() => {
+    getDeviceId().then((res) => setId(res));
+
     const scannerHandler = (e) => {
-      console.log(e.key);
       if (e.key.length === 1) setNumberCode(e.key);
+      if (e.key === "F5") e.preventDefault();
     };
 
     const interval = setInterval(() => {
       setClock(Date());
-    }, 1000);
+    }, 500);
 
     document.addEventListener("keydown", scannerHandler);
+    window.addEventListener("offline", () => setNetwork(false));
+    window.addEventListener("online", () => setNetwork(true));
+    setNetwork(window.navigator.onLine);
 
     return () => {
       document.removeEventListener("keydown", scannerHandler);
+      window.removeEventListener("offline", () => setNetwork(false));
+      window.removeEventListener("online", () => setNetwork(true));
       clearInterval(interval);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

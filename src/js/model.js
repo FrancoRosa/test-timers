@@ -46,6 +46,11 @@ const model = {
   setClock: action((state, clock) => {
     state.clock = clock;
   }),
+
+  network: false,
+  setNetwork: action((state, network) => {
+    state.network = network;
+  }),
 };
 
 export default model;
