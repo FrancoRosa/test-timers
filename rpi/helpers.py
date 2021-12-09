@@ -46,10 +46,14 @@ def get_device_id():
         if search('^Serial', line):
             serial = line.split(': ')[1]
             return insert_dash(serial, 4)
+    return "0000-0000-abcd-ef01"
 
 
 def get_commit():
-    return check_output(['git', 'log', "--pretty=format:'%h'", '-n', '1'])
+    commit = check_output(
+        ['git', 'log', "--pretty=format:'%h %as'", '-n', '1'])
+    commit = commit.decode().replace("'", "").split(" ")
+    return {"hash": commit[0], "date": commit[1]}
 
 
 def scan_wifi():
