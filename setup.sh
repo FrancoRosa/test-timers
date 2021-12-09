@@ -73,5 +73,18 @@ sudo pm2 start /home/pi/test-timers/rpi/api.py --name "timers_backend" --interpr
 sudo pm2 serve /home/pi/test-timers/build 80 --name "timers_frontend"
 sudo pm2 save
 
+# Create browser init script 
+"chromium-browser --kiosk http://localhost:80" > /home/pi/.Xsession
+
+while true; do
+    read -p "Do you wish to reboot? (y/n) " yn
+    case $yn in
+        [Yy]* ) echo "${grn}... rebooting${rst}"; sudo reboot now;break;;
+        [Nn]* ) echo "${red}... dont forget to reboot later${rst}";break;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done
+
+
 
 echo "${grn}... done${rst}"
