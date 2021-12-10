@@ -1,7 +1,11 @@
 import { useStoreActions, useStoreState } from "easy-peasy";
 import { useEffect, useState } from "react";
 import { getDeviceId, sendResult } from "../js/api";
-import { appendToStorage, getSavedStorage } from "../js/helpers";
+import {
+  appendToStorage,
+  getSavedStorage,
+  removeFromStorage,
+} from "../js/helpers";
 import Navigator from "./Navigator";
 import ResultOptions from "./ResultOptions";
 import Box from "./Box";
@@ -57,12 +61,13 @@ const Home = () => {
   };
 
   const handleSuccess = (payload) => {
-    console.log("data send:", payload);
+    console.log("... data send:", payload);
+    removeFromStorage("recorded", payload, "barcode");
   };
 
   const handleError = (payload) => {
-    console.error("data not send", payload);
-    console.error("save to local storage", payload);
+    console.error("... data not send", payload);
+    console.error("... save to local storage", payload);
     appendToStorage("recorded", payload);
   };
 
@@ -132,11 +137,15 @@ const Home = () => {
   useEffect(() => {
     if (network) {
       // Send data recorded in local storage
-      let recordedValues = getSavedStorage("recordedValues", {
-        recordedValues: [],
+      let recordedValues = getSavedStorage("recorded", {
+        recorded: [],
       });
+      console.log("Send data from storage");
       recordedValues.forEach((record) => {
-        console.log(record);
+        console.log("...sending data:", record);
+        sendResult(record).then(() =>
+          removeFromStorage("recorded", record, "barcode")
+        );
       });
     }
   }, [network]);

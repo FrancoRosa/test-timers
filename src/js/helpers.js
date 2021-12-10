@@ -14,4 +14,12 @@ export const appendToStorage = (key, obj) => {
   setSavedStorage(key, values);
 };
 
+export const removeFromStorage = (key, obj, target) => {
+  const values = getSavedStorage(key, { [key]: [] });
+  setSavedStorage(
+    key,
+    values.filter((x) => x[target] !== obj[target])
+  );
+};
+
 export const beepSound = new Audio(beep);
