@@ -1,14 +1,16 @@
 import { useStoreActions, useStoreState } from "easy-peasy";
 import { useEffect, useState } from "react";
 import { getDeviceId, sendResult } from "../js/api";
+import { appendToStorage, getSavedStorage } from "../js/helpers";
 import Navigator from "./Navigator";
-import Box from "./Box";
 import ResultOptions from "./ResultOptions";
+import Box from "./Box";
 import Wifi from "./Wifi";
 
 const Home = () => {
   const boxes = useStoreState((state) => state.boxes);
   const clock = useStoreState((state) => state.clock);
+  const network = useStoreState((state) => state.network);
   const setClock = useStoreActions((action) => action.setClock);
   const setNetwork = useStoreActions((action) => action.setNetwork);
   const elements = [...Array(parseInt(boxes)).keys()];
@@ -54,17 +56,36 @@ const Home = () => {
     return { start: target.start, end };
   };
 
+  const handleSuccess = (payload) => {
+    console.log("data send:", payload);
+  };
+
+  const handleError = (payload) => {
+    console.error("data not send", payload);
+    console.error("save to local storage", payload);
+    appendToStorage("recorded", payload);
+  };
+
   const handleInvalid = () => {
     const { start, end } = handleResponse();
-    sendResult(barcode, "invalid", id, start, end);
+    const payload = { barcode, result: "invalid", id, start, end };
+    sendResult(payload)
+      .then(() => handleSuccess(payload))
+      .catch(() => handleError(payload));
   };
   const handlePositive = () => {
     const { start, end } = handleResponse();
-    sendResult(barcode, "positive", id, start, end);
+    const payload = { barcode, result: "positive", id, start, end };
+    sendResult(payload)
+      .then(() => handleSuccess(payload))
+      .catch(() => handleError(payload));
   };
   const handleNegative = () => {
     const { start, end } = handleResponse();
-    sendResult(barcode, "negative", id, start, end);
+    const payload = { barcode, result: "negative", id, start, end };
+    sendResult(payload)
+      .then(() => handleSuccess(payload))
+      .catch(() => handleError(payload));
   };
 
   useEffect(() => {
@@ -107,6 +128,18 @@ const Home = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clock]);
+
+  useEffect(() => {
+    if (network) {
+      // Send data recorded in local storage
+      let recordedValues = getSavedStorage("recordedValues", {
+        recordedValues: [],
+      });
+      recordedValues.forEach((record) => {
+        console.log(record);
+      });
+    }
+  }, [network]);
 
   useEffect(() => {
     getDeviceId().then((res) => setId(res.id));

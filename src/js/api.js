@@ -3,11 +3,10 @@ import axios from "axios";
 const localhost = `http://${window.location.hostname}:9999`;
 const remotehost = `http://${window.location.hostname}:10000`;
 
-export const sendResult = async (barcode, result, id, start, end) => {
-  const payload = { id, barcode, result, start, end };
+export const sendResult = async (payload) => {
   console.log("... sending results:", payload);
   const url = `${remotehost}/result`;
-  const response = await axios.post(url, { barcode, result, id });
+  const response = await axios.post(url, payload);
   return response.data;
 };
 

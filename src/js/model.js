@@ -1,8 +1,5 @@
 import { action } from "easy-peasy";
-
-const getSavedStorage = (key) => {
-  return JSON.parse(window.localStorage.getItem(key)) || initial[key];
-};
+import { getSavedStorage } from "./helpers";
 
 const initial = {
   pxWidth: 1366,
@@ -17,27 +14,27 @@ const initial = {
 };
 
 const model = {
-  pxWidth: getSavedStorage("pxWidth"),
+  pxWidth: getSavedStorage("pxWidth", initial),
   setPxWidth: action((state, pxWidth) => {
     state.pxWidth = pxWidth;
   }),
 
-  cmWidth: getSavedStorage("cmWidth"),
+  cmWidth: getSavedStorage("cmWidth", initial),
   setCmWidth: action((state, cmWidth) => {
     state.cmWidth = cmWidth;
   }),
 
-  boxes: getSavedStorage("boxes"),
+  boxes: getSavedStorage("boxes", initial),
   setBoxes: action((state, boxes) => {
     state.boxes = boxes;
   }),
 
-  size: getSavedStorage("size"),
+  size: getSavedStorage("size", initial),
   setSize: action((state, size) => {
     state.size = size;
   }),
 
-  time: getSavedStorage("time"),
+  time: getSavedStorage("time", initial),
   setTime: action((state, time) => {
     state.time = time;
   }),
