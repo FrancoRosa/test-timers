@@ -1,5 +1,5 @@
 from subprocess import check_output
-from os import uname
+from os import uname, chdir
 from re import search
 
 is_rpi = uname()[4] != 'x86_64'
@@ -51,10 +51,8 @@ def get_device_id():
 
 def get_commit():
     if (is_rpi):
-        command = ['cd', '/home/pi/test-timers', '&&', 'git',
-                   'log', "--pretty=format:'%h %as'", '-n', '1']
-    else:
-        command = ['git', 'log', "--pretty=format:'%h %as'", '-n', '1']
+        chdir("/home/pi/test-timers")
+    command = ['git', 'log', "--pretty=format:'%h %as'", '-n', '1']
 
     commit = check_output(command)
     commit = commit.decode().replace("'", "").split(" ")
