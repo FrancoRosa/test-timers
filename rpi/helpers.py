@@ -50,8 +50,13 @@ def get_device_id():
 
 
 def get_commit():
-    commit = check_output(
-        ['git', 'log', "--pretty=format:'%h %as'", '-n', '1'])
+    if (is_rpi):
+        command = ['cd', '/home/pi/test-timers', '&&', 'git',
+                   'log', "--pretty=format:'%h %as'", '-n', '1']
+    else:
+        command = ['git', 'log', "--pretty=format:'%h %as'", '-n', '1']
+
+    commit = check_output(command)
     commit = commit.decode().replace("'", "").split(" ")
     return {"hash": commit[0], "date": commit[1]}
 
