@@ -6,19 +6,20 @@ const ResultOptions = ({ handleNegative, handlePositive, handleInvalid }) => {
       const key = e.key
       const numbers = /\d/
       if (key.length === 1 && !numbers.test(key)) {
-        if (key == 'A') handleNegative();
-        if (key == 'B') handlePositive();
-        if (key == 'C') handleInvalid();
+        if (key === 'A') handleNegative();
+        if (key === 'B') handlePositive();
+        if (key === 'C') handleInvalid();
       }
       if (key === "F5") e.preventDefault();
     };
 
     document.addEventListener("keydown", buttonHandler);
+    
     return () => {
       document.removeEventListener("keydown", buttonHandler);
     }
 
-
+// eslint-disable-next-line
   },[])
 
   return (
