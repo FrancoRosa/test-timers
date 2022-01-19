@@ -48,6 +48,11 @@ const model = {
   setNetwork: action((state, network) => {
     state.network = network;
   }),
+
+  message: "Scan a test",
+  setMessage: action((state, message) => {
+    state.message = message;
+  }),
 };
 
 export default model;

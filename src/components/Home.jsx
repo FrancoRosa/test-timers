@@ -13,9 +13,11 @@ import Wifi from "./Wifi";
 
 const Home = () => {
   const boxes = useStoreState((state) => state.boxes);
+  const message = useStoreState((state) => state.message);
   const clock = useStoreState((state) => state.clock);
   const network = useStoreState((state) => state.network);
   const setClock = useStoreActions((action) => action.setClock);
+  const setMessage = useStoreActions((action) => action.setMessage);
   const setNetwork = useStoreActions((action) => action.setNetwork);
   const elements = [...Array(parseInt(boxes)).keys()];
   const initBoxes = [];
@@ -30,7 +32,6 @@ const Home = () => {
 
   const [numberCode, setNumberCode] = useState("");
   const [code, setCode] = useState("");
-  const [message, setMessage] = useState("Scan a test");
   const [barcode, setBarcode] = useState("");
   const [display, setDisplay] = useState(false);
   const [lastTime, setLastTime] = useState(Date.now());
