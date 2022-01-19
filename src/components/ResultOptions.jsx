@@ -21,15 +21,13 @@ const ResultOptions = ({ handleNegative, handlePositive, handleInvalid, handleMi
       const key = e.key;
 
       if (isCommand(key)) {
-        console.log("selection:", selection);
-        console.log("pressed:", key);
         setSelectKey(key);
         setKeyFlag(Date.now())
         if (previousKey === null) {
+          // eslint-disable-next-line
             previousKey = key;
             setSelection(key);
             setMessage("Press again to confirm:");
-            console.log("First selection:", key);
         } 
       }
       if (key === "F5") e.preventDefault();
@@ -52,26 +50,24 @@ const ResultOptions = ({ handleNegative, handlePositive, handleInvalid, handleMi
   useEffect(()=>{
     if (selection !== null) {
       setCounter(counter - 1);
+      // eslint-disable-next-line
       counterVar=counter-1
     }
     else {
       setCounter(3);
+      // eslint-disable-next-line
       counterVar=3;
     }
-    console.log("counter:", counterVar)
   }, [time])
 
   useEffect(()=>{
-    console.log("triggered: key:", selectKey,"prev:" , previousKey)
     if (counter <= 0 && isCommand(selectKey)) {
-      console.log("stage:", selectKey, selection)
       if (selectKey === "A" && selection === "A") handleNegative();
       if (selectKey === "B" && selection === "B") handlePositive();
       if (selectKey === "C" && selection === "C") handleInvalid();
       if (selectKey !== selection) handleMismatch();
-      console.log("Second selection:", selectKey, selection, "counter", counterVar);
-      previousKey = null;
     }
+    // eslint-disable-next-line
   },[keyFlag])
 
   return (
