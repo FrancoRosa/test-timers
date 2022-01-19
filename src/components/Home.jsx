@@ -154,8 +154,10 @@ const Home = () => {
     getDeviceId().then((res) => setId(res.id));
 
     const scannerHandler = (e) => {
-      if (e.key.length === 1) setNumberCode(e.key);
-      if (e.key === "F5") e.preventDefault();
+      const key = e.key
+      const numbers = /\d/
+      if (key.length === 1 && numbers.test(key)) setNumberCode(key);
+      if (key === "F5") e.preventDefault();
     };
 
     const interval = setInterval(() => {
