@@ -73,21 +73,21 @@ const Home = () => {
 
   const handleInvalid = () => {
     const { start, end } = handleResponse();
-    const payload = { barcode, result: "invalid", id, start, end };
+    const payload = { barcode, result: 3, id, start, end };
     sendResult(payload)
       .then(() => handleSuccess(payload))
       .catch(() => handleError(payload));
   };
   const handlePositive = () => {
     const { start, end } = handleResponse();
-    const payload = { barcode, result: "positive", id, start, end };
+    const payload = { barcode, result: 2, id, start, end };
     sendResult(payload)
       .then(() => handleSuccess(payload))
       .catch(() => handleError(payload));
   };
   const handleNegative = () => {
     const { start, end } = handleResponse();
-    const payload = { barcode, result: "negative", id, start, end };
+    const payload = { barcode, result: 1, id, start, end };
     sendResult(payload)
       .then(() => handleSuccess(payload))
       .catch(() => handleError(payload));
