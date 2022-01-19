@@ -94,6 +94,11 @@ const Home = () => {
       .catch(() => handleError(payload));
   };
 
+  const handleMismatch = () => {
+    setDisplay(false);
+    setMessage("");
+  }
+
   useEffect(() => {
     const now = Date.now();
     setCode(`${now - lastTime > 500 ? "" : code}${numberCode}`);
@@ -188,6 +193,7 @@ const Home = () => {
             handleNegative={handleNegative}
             handlePositive={handlePositive}
             handleInvalid={handleInvalid}
+            handleMismatch={handleMismatch}
           />
         )}
       </header>
