@@ -12,7 +12,7 @@ const ResultOptions = ({ handleNegative, handlePositive, handleInvalid, handleMi
   let counterVar = 3;
 
   const isCommand = (key) => {
-    const commands =  /^[A|B|C]$/;
+    const commands =  /^[#|$|%]$/;
     return commands.test(key);
   }
 
@@ -62,9 +62,9 @@ const ResultOptions = ({ handleNegative, handlePositive, handleInvalid, handleMi
 
   useEffect(()=>{
     if (counter <= 0 && isCommand(selectKey)) {
-      if (selectKey === "A" && selection === "A") handleNegative();
-      if (selectKey === "B" && selection === "B") handlePositive();
-      if (selectKey === "C" && selection === "C") handleInvalid();
+      if (selectKey === "#" && selection === "#") handleNegative();
+      if (selectKey === "$" && selection === "$") handlePositive();
+      if (selectKey === "%" && selection === "%") handleInvalid();
       if (selectKey !== selection) handleMismatch();
     }
     // eslint-disable-next-line
@@ -72,7 +72,7 @@ const ResultOptions = ({ handleNegative, handlePositive, handleInvalid, handleMi
 
   return (
     <div className="field is-grouped mt-4">
-      {(selection === "A" || selection === null) && (
+      {(selection === "#" || selection === null) && (
         <button
           onClick={handleNegative}
           className="button is-large is-outlined is-success"
@@ -81,7 +81,7 @@ const ResultOptions = ({ handleNegative, handlePositive, handleInvalid, handleMi
           Not detected
         </button>
       )}
-      {(selection === "B" || selection === null) && (
+      {(selection === "$" || selection === null) && (
         <button
           onClick={handlePositive}
           className="button is-large ml-4 is-outlined is-danger"
@@ -90,7 +90,7 @@ const ResultOptions = ({ handleNegative, handlePositive, handleInvalid, handleMi
           Detected
         </button>
       )}
-      {(selection === "C" || selection === null) && (
+      {(selection === "%" || selection === null) && (
         <button
           onClick={handleInvalid}
           className="button is-large ml-4 is-outlined is-warning"

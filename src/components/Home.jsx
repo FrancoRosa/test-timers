@@ -161,8 +161,8 @@ const Home = () => {
 
     const scannerHandler = (e) => {
       const key = e.key
-      const numbers = /\d/
-      if (key.length === 1 && numbers.test(key)) setNumberCode(key);
+      const codechars = /\w/
+      if (key.length === 1 && codechars.test(key)) setNumberCode(key);
       if (key === "F5") e.preventDefault();
     };
 
