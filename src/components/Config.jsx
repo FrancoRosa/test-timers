@@ -1,7 +1,7 @@
 import { useStoreState, useStoreActions } from "easy-peasy";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { setSavedStorage } from "../js/helpers";
+import { getSavedStorage, setSavedStorage } from "../js/helpers";
 import { useNavigate } from "react-router";
 import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
 import { getCommit, getDeviceId } from "../js/api";
@@ -158,6 +158,9 @@ const Config = () => {
               />
             </div>
           </div>
+          {getSavedStorage("recorded").map((s) => (
+            <p>{s.barcode}</p>
+          ))}
           <button
             onClick={handleSave}
             className={`button is-success is-outlined mt-4 ${
