@@ -1,6 +1,8 @@
 from subprocess import check_output
-from os import uname, chdir
+from os import chdir
 from re import search
+from platform import uname
+from sys import platform
 
 is_rpi = uname()[4] != 'x86_64'
 
@@ -40,13 +42,21 @@ def insert_dash(text, group_len):
 
 
 def get_device_id():
-    info = check_output(['cat', '/proc/cpuinfo'])
-    lines = info.decode('ascii').split('\n')
-    for line in lines:
-        if search('^Serial', line):
-            serial = line.split(': ')[1]
-            return insert_dash(serial, 4)
-    return "0000-0000-abcd-ef01"
+    if platform == "linux" or platform == "linux2":
+        # linux
+        info = check_output(['cat', '/proc/cpuinfo'])
+        lines = info.decode('ascii').split('\n')
+        for line in lines:
+            if search('^Serial', line):
+                serial = line.split(': ')[1]
+                return insert_dash(serial, 4)
+        return "0000-0000-abcd-ef01"
+    elif platform == "darwin":
+        # OS X
+        return "0000-0000-abcd-ef01"
+    elif platform == "win32":
+        # Windows...
+        return "0000-0000-abcd-ef01"
 
 
 def get_commit():

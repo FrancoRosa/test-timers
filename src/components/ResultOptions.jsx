@@ -74,7 +74,7 @@ const ResultOptions = ({ handleNegative, handlePositive, handleInvalid, handleMi
     <div className="field is-grouped mt-4">
       {(selection === "#" || selection === null) && (
         <button
-          onClick={handleNegative}
+          // onClick={handleNegative}
           className="button is-large is-outlined is-success"
           disabled={selection !== null && counter > 0}
         >
@@ -83,7 +83,7 @@ const ResultOptions = ({ handleNegative, handlePositive, handleInvalid, handleMi
       )}
       {(selection === "$" || selection === null) && (
         <button
-          onClick={handlePositive}
+          // onClick={handlePositive}
           className="button is-large ml-4 is-outlined is-danger"
           disabled={selection !== null && counter > 0}
         >
@@ -92,7 +92,7 @@ const ResultOptions = ({ handleNegative, handlePositive, handleInvalid, handleMi
       )}
       {(selection === "%" || selection === null) && (
         <button
-          onClick={handleInvalid}
+          // onClick={handleInvalid}
           className="button is-large ml-4 is-outlined is-warning"
           disabled={selection !== null && counter > 0}
         >
