@@ -165,7 +165,7 @@ const Home = () => {
       } else {
         let box = testBoxes.find((x) => x.specimenID === code);
         if (box.ready) {
-          setMessage(`Test ${code} is ready, select an option:`);
+          setMessage(`Test ${code} is ready, select an option: `);
           setDisplay(true);
         } else {
           setMessage(`Test ${code} is not ready`);
