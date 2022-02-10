@@ -80,7 +80,7 @@ const Box = ({ test, setReady, setFree }) => {
               className="button m-1 is-small is-rounded"
               onClick={handleStop}
             >
-              {"[]"}
+              {"[X]"}
             </button>
             <button className="button m-1 is-small is-rounded">
               {counter}
