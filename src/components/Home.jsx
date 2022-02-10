@@ -2,7 +2,6 @@ import { useStoreActions, useStoreState } from "easy-peasy";
 import { useEffect, useState } from "react";
 import { getDeviceId, sendResult } from "../js/api";
 import {
-  appendToStorage,
   getSavedStorage,
   removeFromStorage,
 } from "../js/helpers";
