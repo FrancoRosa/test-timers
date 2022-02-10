@@ -1,12 +1,12 @@
 import axios from "axios";
 
 const localhost = `http://${window.location.hostname}:9999`;
-const remotehost = `http://${window.location.hostname}:10000`;
+const remotehost = `http://${window.location.hostname}:5102`;
 
 export const sendResult = async (payload) => {
   console.log("... sending results:", payload);
-  const url = `${remotehost}/result`;
-  const response = await axios.post(url, payload);
+  const url = `${remotehost}/api/covidratesting/device/ratestresult`;
+  const response = await axiosPatch(url, payload);
   return response.data;
 };
 
@@ -52,3 +52,13 @@ export const getCommit = async () => {
   const response = await axios.get(url);
   return response.data;
 };
+
+const axiosPatch = (url, payload) => {
+  axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+  return axios.patch(url, payload);
+}
+
+const axiosGet = (url) => {
+  axios.defaults.headers.get['Access-Control-Allow-Origin'] = '*';
+  return axios.get(url);
+}
