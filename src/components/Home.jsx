@@ -56,11 +56,6 @@ const Home = () => {
     let target = testBoxes.find((x) => x.specimenID === specimenID);
     setFree(target.id);
     setReady(target.id, false);
-    let resultDateTime = new Date().toLocaleString() + '';
-    return {
-      processingDateTime: target.processingDateTime,
-      resultDateTime: resultDateTime,
-    };
   };
 
   const handleSuccess = (payload) => {
@@ -75,55 +70,47 @@ const Home = () => {
   };
 
   const handleInvalid = () => {
-    const { processingDateTime, resultDateTime } = handleResponse();
+    handleResponse();
     const payload = {
       SpecimenID: specimenID,
       CovidTestResultID: 3,
       CovidTestStatusID: 6,
       DeviceID: deviceID,
-      ProcessingDateTime: processingDateTime,
-      ResultDateTime: resultDateTime,
     };
     sendResult(payload)
       .then(() => handleSuccess(payload))
       .catch(() => handleError(payload));
   };
   const handlePositive = () => {
-    const { processingDateTime, resultDateTime } = handleResponse();
+    handleResponse();
     const payload = {
       SpecimenID: specimenID,
       CovidTestResultID: 2,
       CovidTestStatusID: 4,
       DeviceID: deviceID,
-      ProcessingDateTime: processingDateTime,
-      ResultDateTime: resultDateTime,
     };
     sendResult(payload)
       .then(() => handleSuccess(payload))
       .catch(() => handleError(payload));
   };
   const handleNegative = () => {
-    const { processingDateTime, resultDateTime } = handleResponse();
+    handleResponse();
     const payload = {
       SpecimenID: specimenID,
       CovidTestResultID: 1,
       CovidTestStatusID: 4,
       DeviceID: deviceID,
-      ProcessingDateTime: processingDateTime,
-      ResultDateTime: resultDateTime,
     };
     sendResult(payload)
       .then(() => handleSuccess(payload))
       .catch(() => handleError(payload));
   };
-  const sendProcessingStart = (specimenID, processingDateTime) => {
+  const sendProcessingStart = (specimenID) => {
     const payload = {
       SpecimenID: specimenID,
       CovidTestResultID: null,
       CovidTestStatusID: 3,
       DeviceID: deviceID,
-      ProcessingDateTime: processingDateTime,
-      ResultDateTimeTicks: null,
     };
     sendResult(payload)
       .then(() => handleSuccess(payload))
@@ -156,7 +143,7 @@ const Home = () => {
         if (availableBox >= 0) {
           testBoxes[availableBox].specimenID = code;
           testBoxes[availableBox].processingDateTime = new Date().toLocaleString() + '';
-          sendProcessingStart(code, testBoxes[availableBox].processingDateTime);
+          sendProcessingStart(code);
           setMessage("Starting timer for test: " + code);
         } else {
           setMessage("No box available for: " + code);
