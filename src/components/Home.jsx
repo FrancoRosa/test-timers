@@ -9,6 +9,7 @@ import Navigator from "./Navigator";
 import ResultOptions from "./ResultOptions";
 import Box from "./Box";
 import Wifi from "./Wifi";
+import BarcodeReader from 'react-barcode-reader'
 
 const Home = () => {
   const boxes = useStoreState((state) => state.boxes);
@@ -122,16 +123,16 @@ const Home = () => {
     setMessage("");
   };
 
-  useEffect(() => {
-    const now = Date.now();
-    setCode(`${now - lastTime > 500 ? "" : code}${numberCode}`);
-    setLastTime(now);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [numberCode]);
+  // useEffect(() => {
+  //   const now = Date.now();
+  //   setCode(`${now - lastTime > 500 ? "" : code}${numberCode}`);
+  //   setLastTime(now);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [numberCode]);
 
   useEffect(() => {
     const now = Date.now();
-     if (now - lastTime > 500 && code !== "") {
+     if (code !== "") {
       setSpecimenID(code);
       let tempBoxes = [...testBoxes];
       let currentTests = tempBoxes.map((x) => x.specimenID);
@@ -231,6 +232,9 @@ const Home = () => {
         />
         <Wifi />
       </div>
+      <BarcodeReader
+        onScan={setCode}
+      />
     </div>
   );
 };
