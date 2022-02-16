@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const localhost = `http://${window.location.hostname}:9999`;
-const remotehost = `http://${window.location.hostname}:5102`;
+const remotehost = `https://imperans-devapi.azurewebsites.net`;
 
 export const sendResult = async (payload) => {
   console.log("... sending results:", payload);
