@@ -29,10 +29,12 @@ body {
 .box-container {
   display: flex;
   flex-wrap: wrap;
-  height: 90vh;
+  height: 85vh;
   width: 100%;
   justify-content: space-around;
   align-items: center;
+  position: absolute;
+  left: -0.5;
 }
 
 .home-container {
@@ -97,7 +99,7 @@ header {
   width: 100vw;
   display: flex;
   justify-content: space-around;
-  height: 10vh;
+  height: 15vh;
 }
 
 .is-small {
