@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { beepSound } from "../js/helpers";
 
 const Box = ({ test, setReady, setFree }) => {
-  const { id, barcode } = test;
+  const { id, specimenID } = test;
   const [counter, setCounter] = useState(0);
   const [status, setStatus] = useState("free"); // free - counting - finished - overtime
 
@@ -49,10 +49,10 @@ const Box = ({ test, setReady, setFree }) => {
   }, [clock]);
 
   useEffect(() => {
-    if (barcode !== null) handleStart();
+    if (specimenID !== null) handleStart();
     else handleStop();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [barcode]);
+  }, [specimenID]);
 
   return (
     <>
@@ -68,7 +68,7 @@ const Box = ({ test, setReady, setFree }) => {
           className={`is-flex is-flex-centered has-background-black is-flex-column`}
           style={boxStyle}
         >
-          <p className="help is-success box-code is-size-4">{barcode}</p>
+          <p className="help is-success box-code is-size-4">{specimenID}</p>
           <div className="field is-grouped">
             <button
               className="button m-1 is-small is-rounded"
@@ -80,7 +80,7 @@ const Box = ({ test, setReady, setFree }) => {
               className="button m-1 is-small is-rounded"
               onClick={handleStop}
             >
-              {"[]"}
+              {"[X]"}
             </button>
             <button className="button m-1 is-small is-rounded">
               {counter}

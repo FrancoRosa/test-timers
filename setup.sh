@@ -74,7 +74,7 @@ sudo pm2 serve /home/pi/test-timers/build 80 --name "timers_frontend"
 sudo pm2 save
 
 # Create browser init script 
-echo "chromium-browser --kiosk http://localhost:80" > /home/pi/.Xsession
+echo "chromium-browser --start-maximized --kiosk http://localhost:80" > /home/pi/.Xsession
 
 while true; do
     read -p "Do you wish to reboot? (y/n) " yn

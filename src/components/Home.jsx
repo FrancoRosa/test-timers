@@ -2,7 +2,6 @@ import { useStoreActions, useStoreState } from "easy-peasy";
 import { useEffect, useState } from "react";
 import { getDeviceId, sendResult } from "../js/api";
 import {
-  appendToStorage,
   getSavedStorage,
   removeFromStorage,
 } from "../js/helpers";
@@ -10,6 +9,7 @@ import Navigator from "./Navigator";
 import ResultOptions from "./ResultOptions";
 import Box from "./Box";
 import Wifi from "./Wifi";
+import BarcodeReader from 'react-barcode-reader'
 
 const Home = () => {
   const boxes = useStoreState((state) => state.boxes);
@@ -24,20 +24,20 @@ const Home = () => {
   elements.forEach((element) => {
     initBoxes.push({
       id: element,
-      barcode: null,
+      specimenID: null,
       ready: false,
-      start: null,
+      processingDateTime: null,
     });
   });
 
   const [numberCode, setNumberCode] = useState("");
   const [code, setCode] = useState("");
-  const [barcode, setBarcode] = useState("");
+  const [specimenID, setSpecimenID] = useState("");
   const [display, setDisplay] = useState(false);
   const [lastTime, setLastTime] = useState(Date.now());
 
   const [testBoxes, setTestBoxes] = useState(initBoxes);
-  const [id, setId] = useState("");
+  const [deviceID, setDeviceID] = useState("");
 
   const setReady = (id, ready) => {
     let tempBoxes = [...testBoxes];
@@ -46,49 +46,73 @@ const Home = () => {
 
   const setFree = (id) => {
     let tempBoxes = [...testBoxes];
-    tempBoxes[id].barcode = null;
+    tempBoxes[id].specimenID = null;
     setTestBoxes(tempBoxes);
   };
 
   const handleResponse = () => {
     setDisplay(false);
     setMessage("");
-    console.log(barcode);
-    let target = testBoxes.find((x) => x.barcode === barcode);
+    console.log(specimenID);
+    let target = testBoxes.find((x) => x.specimenID === specimenID);
     setFree(target.id);
     setReady(target.id, false);
-    let end = Date.now();
-    return { start: target.start, end };
   };
 
   const handleSuccess = (payload) => {
     console.log("... data send:", payload);
-    removeFromStorage("recorded", payload, "barcode");
+    removeFromStorage("recorded", payload, "specimenID");
   };
 
   const handleError = (payload) => {
     console.error("... data not send", payload);
     console.error("... save to local storage", payload);
-    appendToStorage("recorded", payload);
+    // appendToStorage("recorded", payload);
   };
 
   const handleInvalid = () => {
-    const { start, end } = handleResponse();
-    const payload = { barcode, result: 3, id, start, end };
+    handleResponse();
+    const payload = {
+      SpecimenID: specimenID,
+      CovidTestResultID: 3,
+      CovidTestStatusID: 6,
+      DeviceID: deviceID,
+    };
     sendResult(payload)
       .then(() => handleSuccess(payload))
       .catch(() => handleError(payload));
   };
   const handlePositive = () => {
-    const { start, end } = handleResponse();
-    const payload = { barcode, result: 2, id, start, end };
+    handleResponse();
+    const payload = {
+      SpecimenID: specimenID,
+      CovidTestResultID: 2,
+      CovidTestStatusID: 4,
+      DeviceID: deviceID,
+    };
     sendResult(payload)
       .then(() => handleSuccess(payload))
       .catch(() => handleError(payload));
   };
   const handleNegative = () => {
-    const { start, end } = handleResponse();
-    const payload = { barcode, result: 1, id, start, end };
+    handleResponse();
+    const payload = {
+      SpecimenID: specimenID,
+      CovidTestResultID: 1,
+      CovidTestStatusID: 4,
+      DeviceID: deviceID,
+    };
+    sendResult(payload)
+      .then(() => handleSuccess(payload))
+      .catch(() => handleError(payload));
+  };
+  const sendProcessingStart = (specimenID) => {
+    const payload = {
+      SpecimenID: specimenID,
+      CovidTestResultID: null,
+      CovidTestStatusID: 3,
+      DeviceID: deviceID,
+    };
     sendResult(payload)
       .then(() => handleSuccess(payload))
       .catch(() => handleError(payload));
@@ -97,37 +121,38 @@ const Home = () => {
   const handleMismatch = () => {
     setDisplay(false);
     setMessage("");
-  }
+  };
+
+  // useEffect(() => {
+  //   const now = Date.now();
+  //   setCode(`${now - lastTime > 500 ? "" : code}${numberCode}`);
+  //   setLastTime(now);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [numberCode]);
 
   useEffect(() => {
     const now = Date.now();
-    setCode(`${now - lastTime > 500 ? "" : code}${numberCode}`);
-    setLastTime(now);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [numberCode]);
-
-  useEffect(() => {
-    const now = Date.now();
-    if (now - lastTime > 500 && code !== "") {
-      setBarcode(code);
+     if (code !== "") {
+      setSpecimenID(code);
       let tempBoxes = [...testBoxes];
-      let currentTests = tempBoxes.map((x) => x.barcode);
+      let currentTests = tempBoxes.map((x) => x.specimenID);
       let availableBox = currentTests.indexOf(null);
       let isNew = !currentTests.includes(code);
 
       if (isNew) {
         setDisplay(false);
         if (availableBox >= 0) {
-          testBoxes[availableBox].barcode = code;
-          testBoxes[availableBox].start = Date.now();
+          testBoxes[availableBox].specimenID = code;
+          testBoxes[availableBox].processingDateTime = new Date().toLocaleString() + '';
+          sendProcessingStart(code);
           setMessage("Starting timer for test: " + code);
         } else {
           setMessage("No box available for: " + code);
         }
       } else {
-        let box = testBoxes.find((x) => x.barcode === code);
+        let box = testBoxes.find((x) => x.specimenID === code);
         if (box.ready) {
-          setMessage(`Test ${code} is ready, select an option:`);
+          setMessage(`Test ${code} is ready, select an option: `);
           setDisplay(true);
         } else {
           setMessage(`Test ${code} is not ready`);
@@ -150,18 +175,18 @@ const Home = () => {
       recordedValues.forEach((record) => {
         console.log("...sending data:", record);
         sendResult(record).then(() =>
-          removeFromStorage("recorded", record, "barcode")
+          removeFromStorage("recorded", record, "specimenID")
         );
       });
     }
   }, [network]);
 
   useEffect(() => {
-    getDeviceId().then((res) => setId(res.id));
+    getDeviceId().then((res) => setDeviceID(res.id));
 
     const scannerHandler = (e) => {
-      const key = e.key
-      const codechars = /\w/
+      const key = e.key;
+      const codechars = /\w/;
       if (key.length === 1 && codechars.test(key)) setNumberCode(key);
       if (key === "F5") e.preventDefault();
     };
@@ -207,6 +232,9 @@ const Home = () => {
         />
         <Wifi />
       </div>
+      <BarcodeReader
+        onScan={setCode}
+      />
     </div>
   );
 };
