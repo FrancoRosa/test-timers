@@ -1,7 +1,12 @@
 import { useStoreActions } from "easy-peasy";
 import { useEffect, useState } from "react";
 
-const ResultOptions = ({ handleNegative, handlePositive, handleInvalid, handleMismatch }) => {
+const ResultOptions = ({
+  handleNegative,
+  handlePositive,
+  handleInvalid,
+  handleMismatch,
+}) => {
   const setMessage = useStoreActions((action) => action.setMessage);
   const [selection, setSelection] = useState(null);
   const [counter, setCounter] = useState(3);
@@ -12,9 +17,9 @@ const ResultOptions = ({ handleNegative, handlePositive, handleInvalid, handleMi
   let counterVar = 3;
 
   const isCommand = (key) => {
-    const commands =  /^[#|$|%]$/;
+    const commands = /^[#|$|%]$/;
     return commands.test(key);
-  }
+  };
 
   useEffect(() => {
     const buttonHandler = (e) => {
@@ -22,13 +27,13 @@ const ResultOptions = ({ handleNegative, handlePositive, handleInvalid, handleMi
 
       if (isCommand(key)) {
         setSelectKey(key);
-        setKeyFlag(Date.now())
+        setKeyFlag(Date.now());
         if (previousKey === null) {
           // eslint-disable-next-line
-            previousKey = key;
-            setSelection(key);
-            setMessage("Press again to confirm:");
-        } 
+          previousKey = key;
+          setSelection(key);
+          setMessage("Press again to confirm:");
+        }
       }
       if (key === "F5") e.preventDefault();
     };
@@ -36,31 +41,30 @@ const ResultOptions = ({ handleNegative, handlePositive, handleInvalid, handleMi
     document.addEventListener("keydown", buttonHandler);
 
     const tic = setInterval(() => {
-      setTime(Date.now())
+      setTime(Date.now());
     }, 1000);
 
     return () => {
       document.removeEventListener("keydown", buttonHandler);
-      clearInterval(tic)
+      clearInterval(tic);
     };
 
     // eslint-disable-next-line
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (selection !== null) {
       setCounter(counter - 1);
       // eslint-disable-next-line
-      counterVar=counter-1
-    }
-    else {
+      counterVar = counter - 1;
+    } else {
       setCounter(3);
       // eslint-disable-next-line
-      counterVar=3;
+      counterVar = 3;
     }
-  }, [time])
+  }, [time]);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (counter <= 0 && isCommand(selectKey)) {
       if (selectKey === "#" && selection === "#") handleNegative();
       if (selectKey === "$" && selection === "$") handlePositive();
@@ -68,14 +72,14 @@ const ResultOptions = ({ handleNegative, handlePositive, handleInvalid, handleMi
       if (selectKey !== selection) handleMismatch();
     }
     // eslint-disable-next-line
-  },[keyFlag])
+  }, [keyFlag]);
 
   return (
-    <div className="field is-grouped mt-4">
+    <div className="field is-grouped mt-4 top-options">
       {(selection === "#" || selection === null) && (
         <button
           // onClick={handleNegative}
-          className="button is-large is-outlined is-success"
+          className="button is-medium is-outlined is-success"
           disabled={selection !== null && counter > 0}
         >
           Not detected
@@ -84,7 +88,7 @@ const ResultOptions = ({ handleNegative, handlePositive, handleInvalid, handleMi
       {(selection === "$" || selection === null) && (
         <button
           // onClick={handlePositive}
-          className="button is-large ml-4 is-outlined is-danger"
+          className="button is-medium ml-4 is-outlined is-danger"
           disabled={selection !== null && counter > 0}
         >
           Detected
@@ -93,7 +97,7 @@ const ResultOptions = ({ handleNegative, handlePositive, handleInvalid, handleMi
       {(selection === "%" || selection === null) && (
         <button
           // onClick={handleInvalid}
-          className="button is-large ml-4 is-outlined is-warning"
+          className="button is-medium ml-4 is-outlined is-warning"
           disabled={selection !== null && counter > 0}
         >
           Incomplete

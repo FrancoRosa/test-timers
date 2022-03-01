@@ -1,15 +1,12 @@
 import { useStoreActions, useStoreState } from "easy-peasy";
 import { useEffect, useState } from "react";
 import { getDeviceId, sendResult } from "../js/api";
-import {
-  getSavedStorage,
-  removeFromStorage,
-} from "../js/helpers";
+import { getSavedStorage, removeFromStorage } from "../js/helpers";
 import Navigator from "./Navigator";
 import ResultOptions from "./ResultOptions";
 import Box from "./Box";
 import Wifi from "./Wifi";
-import BarcodeReader from 'react-barcode-reader'
+import BarcodeReader from "react-barcode-reader";
 
 const Home = () => {
   const boxes = useStoreState((state) => state.boxes);
@@ -132,7 +129,7 @@ const Home = () => {
 
   useEffect(() => {
     const now = Date.now();
-     if (code !== "") {
+    if (code !== "") {
       setSpecimenID(code);
       let tempBoxes = [...testBoxes];
       let currentTests = tempBoxes.map((x) => x.specimenID);
@@ -143,7 +140,8 @@ const Home = () => {
         setDisplay(false);
         if (availableBox >= 0) {
           testBoxes[availableBox].specimenID = code;
-          testBoxes[availableBox].processingDateTime = new Date().toLocaleString() + '';
+          testBoxes[availableBox].processingDateTime =
+            new Date().toLocaleString() + "";
           sendProcessingStart(code);
           setMessage("Starting timer for test: " + code);
         } else {
@@ -212,7 +210,7 @@ const Home = () => {
   return (
     <div className="home-container">
       <header>
-        <p className="has-text-centered title mt-4">{message}</p>
+        <p className="has-text-centered title mt-4 top-message">{message}</p>
         {display && (
           <ResultOptions
             handleNegative={handleNegative}
@@ -232,9 +230,7 @@ const Home = () => {
         />
         <Wifi />
       </div>
-      <BarcodeReader
-        onScan={setCode}
-      />
+      <BarcodeReader onScan={setCode} />
     </div>
   );
 };

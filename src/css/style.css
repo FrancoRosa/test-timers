@@ -100,6 +100,7 @@ header {
   display: flex;
   justify-content: space-around;
   height: 15vh;
+  padding-top: 4.5em;
 }
 
 .is-small {
@@ -109,4 +110,14 @@ header {
 
 .is-flex-end {
   justify-content: flex-end;
+}
+
+.top-message {
+  position: absolute;
+  left: 10em;
+}
+
+.top-options {
+  position: absolute;
+  right: 10em;
 }
