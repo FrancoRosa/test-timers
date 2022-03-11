@@ -114,10 +114,10 @@ header {
 
 .top-message {
   position: absolute;
-  left: 440em;
+  left: 440px;
 }
 
 .top-options {
   position: absolute;
-  right: 243em;
+  right: 243px;
 }
